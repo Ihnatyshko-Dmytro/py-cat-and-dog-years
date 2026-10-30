@@ -13,7 +13,7 @@ class TestHumanAge:
             pytest.param(15, 15, [1, 1],
                          id="test_should_one_with_argument_15"),
             pytest.param(24, 24, [2, 2],
-                         id="test_shouldsecond_human_year_at_24"),
+                         id="test_should_second_human_year_at_24"),
             pytest.param(28, 28, [3, 2],
                          id="test_should_every_four_years_above_24"),
             pytest.param(29, 29, [3, 3],
@@ -31,3 +31,33 @@ class TestHumanAge:
             list_of_human_yers: list
     ) -> None:
         assert get_human_age(cat_years, dog_years) == list_of_human_yers
+
+    @pytest.mark.parametrize(
+        ("cat_age,dog_age,expected"),
+        [
+            (-1, -1, [0, 0]),
+            (-1, 15, [0, 1]),
+            (15, -1, [1, 0]),
+        ],
+    )
+    def test_should_return_zero_for_negative_age(
+            self,
+            cat_age: int,
+            dog_age: int,
+            expected: list,
+    ) -> None:
+        assert get_human_age(cat_age, dog_age) == expected
+
+    @pytest.mark.parametrize(
+        ("cat_age,dog_age"),
+        [
+            ("15", 15),
+            (15, "15"),
+            (None, 15),
+            (15, None),
+        ],
+    )
+    def test_should_raise_type_error_for_invalid_types(self, cat_age: int,
+                                                       dog_age: int) -> None:
+        with pytest.raises(TypeError):
+            get_human_age(cat_age, dog_age)
